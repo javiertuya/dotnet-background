@@ -42,7 +42,8 @@ namespace DotnetBackground
             }
             catch (Exception)
             {
-                throw new CustomArgumentException("Can't read the process pid file: " + PidFileName);
+                Console.WriteLine("Process pid file not found: " + PidFileName);
+                return;
             }
 
             //Kills each process

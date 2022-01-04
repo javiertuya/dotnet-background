@@ -3,20 +3,20 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <InformationalVersion>1.0.11</InformationalVersion>
+    <InformationalVersion>1.1.0</InformationalVersion>
     
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>DotnetBackground</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <RepositoryUrl>https://github.com/$(GITHUB_REPOSITORY)</RepositoryUrl>
-    <Version>1.0.11</Version>
+    <Version>1.1.0</Version>
     <Authors>Javier Tuya</Authors>
     <Company>GIIS - University of Oviedo</Company>
     <Description>
       An easy way to launch dotnet run background processes and kill each process and their descendants with a single command.
     </Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/javiertuya/dotnet-test-split</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/javiertuya/dotnet-background</PackageProjectUrl>
     <PackageTags>dotnet, run, kill, background, parallel, process</PackageTags>
   </PropertyGroup>
 
