@@ -20,6 +20,8 @@ namespace DotnetBackground
             string outFile = Path.Combine(CustomArgs.OutDir, "dotnet-" + CustomArgs.Name + "-out.log");
             string errFile = Path.Combine(CustomArgs.OutDir, "dotnet-" + CustomArgs.Name + "-err.log");
             string command = string.Join(" ", args);
+            if (CustomArgs.OutDir != ".")
+                Directory.CreateDirectory(CustomArgs.OutDir);
 
             //Launch the dotnet run command inside a shell and stores the main process pid
             Int32 pid = RunCommand(command, outFile, errFile);

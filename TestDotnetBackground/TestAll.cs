@@ -43,14 +43,14 @@ namespace TestDotnetBackground
         }
 
 
-        private const string OutFolder = "../../../../reports";
-        private const string ProcessPidLog = "../../../../reports/" + ProcessLauncher.PidFileName;
-        private const string Process1OutLog = "../../../../reports/dotnet-TestProcess-out.log";
-        private const string Process1ErrLog = "../../../../reports/dotnet-TestProcess-err.log";
-        private const string Process2OutLog = "../../../../reports/dotnet-CustomNamed-out.log";
-        private const string Process2ErrLog = "../../../../reports/dotnet-CustomNamed-err.log";
-        private const string ProcessxOutLog = "../../../../reports/dotnet-ExitedProcess-out.log";
-        private const string ProcessxErrLog = "../../../../reports/dotnet-ExitedProcess-err.log";
+        private const string OutFolder = "../../../../reports/nunit";
+        private const string ProcessPidLog = "../../../../reports/nunit/" + ProcessLauncher.PidFileName;
+        private const string Process1OutLog = "../../../../reports/nunit/dotnet-TestProcess-out.log";
+        private const string Process1ErrLog = "../../../../reports/nunit/dotnet-TestProcess-err.log";
+        private const string Process2OutLog = "../../../../reports/nunit/dotnet-CustomNamed-out.log";
+        private const string Process2ErrLog = "../../../../reports/nunit/dotnet-CustomNamed-err.log";
+        private const string ProcessxOutLog = "../../../../reports/nunit/dotnet-ExitedProcess-out.log";
+        private const string ProcessxErrLog = "../../../../reports/nunit/dotnet-ExitedProcess-err.log";
 
         [Test]
         public void TestWorkflow()
@@ -68,10 +68,10 @@ namespace TestDotnetBackground
 
             //Launch and wait
             ProcessLauncher launcher = new ProcessLauncher();
-            launcher.DotnetRun("run --out ../../../../reports --project ../../../../TestProcess/TestProcess.csproj --no-restore".Split(" "));
-            launcher.DotnetRun("run --name CustomNamed --out ../../../../reports --project ../../../../TestProcess/TestProcess.csproj --no-restore ab cd".Split(" "));
-            launcher.DotnetRun("run --name ExitedProcess --out ../../../../reports --project ../../../../TestProcess/TestProcess.csproj --no-restore exit".Split(" "));
-            System.Threading.Thread.Sleep(4500); //time to write some additional line
+            launcher.DotnetRun("run --out ../../../../reports/nunit --project ../../../../TestProcess/TestProcess.csproj --no-restore".Split(" "));
+            launcher.DotnetRun("run --name CustomNamed --out ../../../../reports/nunit --project ../../../../TestProcess/TestProcess.csproj --no-restore ab cd".Split(" "));
+            launcher.DotnetRun("run --name ExitedProcess --out ../../../../reports/nunit --project ../../../../TestProcess/TestProcess.csproj --no-restore exit".Split(" "));
+            System.Threading.Thread.Sleep(5000); //time to write some additional line
 
             //Read proceses pids
             string[] pids=File.ReadAllLines(ProcessPidLog);

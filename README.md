@@ -1,7 +1,7 @@
 ![Status](https://github.com/javiertuya/dotnet-background/actions/workflows/test.yml/badge.svg)
 [![Nuget](https://img.shields.io/nuget/v/DotnetTestSplit)](https://www.nuget.org/packages/DotnetBackground/)
 
-# dotnet-test-split
+# dotnet-background
 
 An easy way to launch dotnet run background processes and kill each process and their descendants with a single command.
 
@@ -34,13 +34,13 @@ DotnetBackground kill
 
 ## Additional options
 
-`DotnetBackground` allows some additional options that can be added to the command line (these parameters are not send to `dotnet`)
+`DotnetBackground` allows some additional options that can be added to the command line (these options are not send to `dotnet`)
 
 - `--out <path>`: Sets the output folder where the log files are stored. Default is the current folder.
 - `--name <name>`: Sets the name of the process (used to identfy the log files). By default it is the name of the project. 
 Note that if several instances of the the same project are launched, they need to specify different names.
 
-This example launches two instances of the same process with different arguments and moves all logs to the reports folder:
+This example launches two instances of the same process with different arguments and moves all logs to the `reports` folder:
 
 ```
 DotnetBackground run --project project1/project1.csproj --name instance1 --out report --no-restore param1

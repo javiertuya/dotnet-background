@@ -1,0 +1,43 @@
+name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+            dotnet-version: '3.1.x'
+
+      - name: Run test from project
+        run: |
+          dotnet build TestProcess/TestProcess.csproj
+          dotnet test --logger "trx;LogFileName=../../reports/nunit/dotnet-background-report.trx" TestDotnetBackground/TestDotnetBackground.csproj
+
+      - name: Run test from commandline
+        if: always()
+        run: |
+          dotnet new tool-manifest
+          dotnet pack DotnetBackground/DotnetBackground.csproj
+          dotnet tool install --no-cache --add-source DotnetBackground/nupkg DotnetBackground
+          dotnet build TestProcess/TestProcess.csproj
+          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --no-restore
+          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --no-restore --name CustomNamed ab cd
+          sleep 5
+          dotnet DotnetBackground kill --out reports/cmdline
+
+      - name: Publish test report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: test-report
+          path: reports/nunit/dotnet-background-report.trx
+          reporter: dotnet-trx
+          fail-on-error: 'true'
+
+      - name: Publish test report files
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: reports
