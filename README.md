@@ -1,5 +1,5 @@
 ![Status](https://github.com/javiertuya/dotnet-background/actions/workflows/test.yml/badge.svg)
-[![Nuget](https://img.shields.io/nuget/v/DotnetTestSplit)](https://www.nuget.org/packages/DotnetBackground/)
+[![Nuget](https://img.shields.io/nuget/v/DotnetBackground)](https://www.nuget.org/packages/DotnetBackground/)
 
 # dotnet-background
 
