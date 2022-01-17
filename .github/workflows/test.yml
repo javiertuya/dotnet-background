@@ -1,5 +1,13 @@
 name: Test
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**' #avoid duplicates: only run the PR, not the commit
+    tags-ignore:
+      - 'v*' #avoids rerun existing commit on release
+  pull_request:
+    branches:
+      - 'main'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -26,8 +34,14 @@ jobs:
           sleep 5
           dotnet DotnetBackground kill --out reports/cmdline
 
+      #Shows error message in case of some failure (as test report checks are not always produced)
+      - name: Failure message if needed
+        if: failure()
+        run: echo "::error ::There was a build error or test failure, see the log and diff files in the test report artifacts"
+
+      #prevents execution on PR or dependabot that fails with "Resource not accessible by integration" due to permissions
       - name: Publish test report
-        if: always()
+        if: ${{ always() && github.actor=='javiertuya' }} 
         uses: dorny/test-reporter@v1
         with:
           name: test-report
