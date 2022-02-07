@@ -16,8 +16,8 @@ jobs:
             dotnet-version: '6.0.x'
       - name: Pack
         run: dotnet pack --configuration Release DotnetBackground/DotnetBackground.csproj
-      #- name: Push to nuget.org
-      #  run: dotnet nuget push DotnetBackground/nupkg/*.nupkg  --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json"
-      - name: Push to int.nugettest.org
-        run: dotnet nuget push DotnetBackground/nupkg/*.nupkg  --api-key ${{ secrets.NUGETTEST_API_KEY }} --source "https://apiint.nugettest.org/v3/index.json"
+      - name: Push to nuget.org
+        run: dotnet nuget push DotnetBackground/nupkg/*.nupkg  --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json"
+      #- name: Push to int.nugettest.org
+      #  run: dotnet nuget push DotnetBackground/nupkg/*.nupkg  --api-key ${{ secrets.NUGETTEST_API_KEY }} --source "https://apiint.nugettest.org/v3/index.json"
  
