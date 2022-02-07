@@ -3,13 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <InformationalVersion>1.2.0</InformationalVersion>
+    <InformationalVersion>1.2.1-snapshot</InformationalVersion>
     
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>DotnetBackground</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <RepositoryUrl>https://github.com/$(GITHUB_REPOSITORY)</RepositoryUrl>
-    <Version>1.2.0</Version>
+    <Version>1.2.1-snapshot</Version>
     <Authors>Javier Tuya</Authors>
     <Company>GIIS - University of Oviedo</Company>
     <Description>
