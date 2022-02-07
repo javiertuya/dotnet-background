@@ -13,19 +13,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ['3.1.x', '5.0.x' ]
+        dotnet-version: ['netcoreapp3.1', 'net5.0' ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
-            dotnet-version: ${{ matrix.dotnet-version }}
+            dotnet-version: '3.1.x' #${{ matrix.dotnet-version }}
+      - uses: actions/setup-dotnet@v1
+        with:
+            dotnet-version: '5.0.x' #${{ matrix.dotnet-version }}
       - name: Display dotnet version
         run: dotnet --version
       - name: Run test from project
         run: |
           dotnet build TestProcess/TestProcess.csproj
-          dotnet test --logger "trx;LogFileName=../../reports/nunit/dotnet-background-report.trx" TestDotnetBackground/TestDotnetBackground.csproj
+          dotnet test --framework ${{ matrix.dotnet-version }} --logger "trx;LogFileName=../../reports/nunit/dotnet-background-report.trx" TestDotnetBackground/TestDotnetBackground.csproj
 
       - name: Run test from commandline
         if: always()
@@ -34,8 +37,8 @@ jobs:
           dotnet pack DotnetBackground/DotnetBackground.csproj
           dotnet tool install --no-cache --add-source DotnetBackground/nupkg DotnetBackground
           dotnet build TestProcess/TestProcess.csproj
-          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --no-restore
-          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --no-restore --name CustomNamed ab cd
+          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --framework ${{ matrix.dotnet-version }} --no-restore
+          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --framework ${{ matrix.dotnet-version }} --no-restore --name CustomNamed ab cd
           sleep 5
           dotnet DotnetBackground kill --out reports/cmdline
 
