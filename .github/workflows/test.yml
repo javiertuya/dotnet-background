@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         dotnet-version: ['3.1.x', '5.0.x' ]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
@@ -48,7 +49,7 @@ jobs:
         if: ${{ always() && github.actor=='javiertuya' }} 
         uses: dorny/test-reporter@v1
         with:
-          name: test-report
+          name: test-report-${{ matrix.dotnet-version }}
           path: reports/nunit/dotnet-background-report.trx
           reporter: dotnet-trx
           fail-on-error: 'true'
@@ -57,5 +58,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-reports
+          name: test-reports-${{ matrix.dotnet-version }}
           path: reports
