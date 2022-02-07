@@ -59,6 +59,8 @@ namespace TestDotnetBackground
                 return "netcoreapp3.1";
             else if (framework.StartsWith(".NET 5.0."))
                 return "net5.0";
+            else if (framework.StartsWith(".NET 6.0."))
+                return "net6.0";
             else
                 throw new Exception("Runtime framework not allowed for this test: " + framework);
         }
