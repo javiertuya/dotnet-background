@@ -13,22 +13,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ['netcoreapp3.1', 'net5.0' ]
+        framework: ['netcoreapp3.1', 'net5.0' ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
-            dotnet-version: '3.1.x' #${{ matrix.dotnet-version }}
+            framework: '3.1.x'
       - uses: actions/setup-dotnet@v1
         with:
-            dotnet-version: '5.0.x' #${{ matrix.dotnet-version }}
-      - name: Display dotnet version
-        run: dotnet --version
+            framework: '5.0.x'
       - name: Run test from project
         run: |
           dotnet build TestProcess/TestProcess.csproj
-          dotnet test --framework ${{ matrix.dotnet-version }} --logger "trx;LogFileName=../../reports/nunit/dotnet-background-report.trx" TestDotnetBackground/TestDotnetBackground.csproj
+          dotnet test --framework ${{ matrix.framework }} --logger "trx;LogFileName=../../reports/nunit/dotnet-background-report.trx" TestDotnetBackground/TestDotnetBackground.csproj
 
       - name: Run test from commandline
         if: always()
@@ -37,8 +35,8 @@ jobs:
           dotnet pack DotnetBackground/DotnetBackground.csproj
           dotnet tool install --no-cache --add-source DotnetBackground/nupkg DotnetBackground
           dotnet build TestProcess/TestProcess.csproj
-          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --framework ${{ matrix.dotnet-version }} --no-restore
-          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --framework ${{ matrix.dotnet-version }} --no-restore --name CustomNamed ab cd
+          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --framework ${{ matrix.framework }} --no-restore
+          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --framework ${{ matrix.framework }} --no-restore --name CustomNamed ab cd
           sleep 5
           dotnet DotnetBackground kill --out reports/cmdline
 
@@ -52,7 +50,7 @@ jobs:
         if: ${{ always() && github.actor=='javiertuya' }} 
         uses: dorny/test-reporter@v1
         with:
-          name: test-report-${{ matrix.dotnet-version }}
+          name: test-report-${{ matrix.framework }}
           path: reports/nunit/dotnet-background-report.trx
           reporter: dotnet-trx
           fail-on-error: 'true'
@@ -61,5 +59,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-reports-${{ matrix.dotnet-version }}
+          name: test-reports-${{ matrix.framework }}
           path: reports
