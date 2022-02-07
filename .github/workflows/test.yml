@@ -11,16 +11,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        framework: ['netcoreapp3.1', 'net5.0', 'net6.0' ]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
+      #requires all sdks to compile and run, but tests and process will be exeucuted on each matrix framework
       - uses: actions/setup-dotnet@v1
         with:
             dotnet-version: '3.1.x'
-
+      - uses: actions/setup-dotnet@v1
+        with:
+            dotnet-version: '5.0.x'
+      - uses: actions/setup-dotnet@v1
+        with:
+            dotnet-version: '6.0.x'
       - name: Run test from project
         run: |
           dotnet build TestProcess/TestProcess.csproj
-          dotnet test --logger "trx;LogFileName=../../reports/nunit/dotnet-background-report.trx" TestDotnetBackground/TestDotnetBackground.csproj
+          dotnet test --framework ${{ matrix.framework }} --logger "trx;LogFileName=../../reports/nunit/dotnet-background-report.trx" TestDotnetBackground/TestDotnetBackground.csproj
 
       - name: Run test from commandline
         if: always()
@@ -29,8 +39,8 @@ jobs:
           dotnet pack DotnetBackground/DotnetBackground.csproj
           dotnet tool install --no-cache --add-source DotnetBackground/nupkg DotnetBackground
           dotnet build TestProcess/TestProcess.csproj
-          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --no-restore
-          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --no-restore --name CustomNamed ab cd
+          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --framework ${{ matrix.framework }} --no-restore
+          dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --framework ${{ matrix.framework }} --no-restore --name CustomNamed ab cd
           sleep 5
           dotnet DotnetBackground kill --out reports/cmdline
 
@@ -44,7 +54,7 @@ jobs:
         if: ${{ always() && github.actor=='javiertuya' }} 
         uses: dorny/test-reporter@v1
         with:
-          name: test-report
+          name: test-report-${{ matrix.framework }}
           path: reports/nunit/dotnet-background-report.trx
           reporter: dotnet-trx
           fail-on-error: 'true'
@@ -53,5 +63,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-reports
+          name: test-reports-${{ matrix.framework }}
           path: reports

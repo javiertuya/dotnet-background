@@ -52,9 +52,23 @@ namespace TestDotnetBackground
         private const string ProcessxOutLog = "../../../../reports/nunit/dotnet-ExitedProcess-out.log";
         private const string ProcessxErrLog = "../../../../reports/nunit/dotnet-ExitedProcess-err.log";
 
+        private string GetTargetFrameworkMoniker()
+        {
+            string framework = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
+            if (framework.StartsWith(".NET Core 3.1."))
+                return "netcoreapp3.1";
+            else if (framework.StartsWith(".NET 5.0."))
+                return "net5.0";
+            else if (framework.StartsWith(".NET 6.0."))
+                return "net6.0";
+            else
+                throw new Exception("Runtime framework not allowed for this test: " + framework);
+        }
         [Test]
         public void TestWorkflow()
         {
+            string tfm = GetTargetFrameworkMoniker();
+            Console.Out.WriteLine("Running on: "+tfm);
             //Requires TestProcess project previously built.
             //setup clean environment
             Directory.CreateDirectory(OutFolder);
@@ -66,11 +80,13 @@ namespace TestDotnetBackground
             File.Delete(ProcessxErrLog);
             File.Delete(ProcessxOutLog);
 
-            //Launch and wait
+            //Launch and wait (using the TFM that corresponds with the framework executing this test) 
+            string outParam = " --out ../../../../reports/nunit";
+            string projectParam = " --project ../../../../TestProcess/TestProcess.csproj --no-restore --framework " + tfm;
             ProcessLauncher launcher = new ProcessLauncher();
-            launcher.DotnetRun("run --out ../../../../reports/nunit --project ../../../../TestProcess/TestProcess.csproj --no-restore".Split(" "));
-            launcher.DotnetRun("run --name CustomNamed --out ../../../../reports/nunit --project ../../../../TestProcess/TestProcess.csproj --no-restore ab cd".Split(" "));
-            launcher.DotnetRun("run --name ExitedProcess --out ../../../../reports/nunit --project ../../../../TestProcess/TestProcess.csproj --no-restore exit".Split(" "));
+            launcher.DotnetRun(("run" + outParam + projectParam).Split(" "));
+            launcher.DotnetRun(("run --name CustomNamed" + outParam + projectParam + " ab cd").Split(" "));
+            launcher.DotnetRun(("run --name ExitedProcess" + outParam + projectParam + " exit").Split(" "));
             System.Threading.Thread.Sleep(5000); //time to write some additional line
 
             //Read proceses pids
