@@ -19,13 +19,13 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
-            framework: '3.1.x'
+            dotnet-version: '3.1.x'
       - uses: actions/setup-dotnet@v1
         with:
-            framework: '5.0.x'
+            dotnet-version: '5.0.x'
       - uses: actions/setup-dotnet@v1
         with:
-            framework: '6.0.x'
+            dotnet-version: '6.0.x'
       - name: Run test from project
         run: |
           dotnet build TestProcess/TestProcess.csproj
