@@ -16,7 +16,7 @@ jobs:
         framework: ['netcoreapp3.1', 'net5.0', 'net6.0' ]
       fail-fast: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       #requires all sdks to compile and run, but tests and process will be exeucuted on each matrix framework
       - uses: actions/setup-dotnet@v1
         with:
