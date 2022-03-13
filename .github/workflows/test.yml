@@ -18,13 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       #requires all sdks to compile and run, but tests and process will be exeucuted on each matrix framework
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v2
         with:
             dotnet-version: '3.1.x'
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v2
         with:
             dotnet-version: '5.0.x'
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v2
         with:
             dotnet-version: '6.0.x'
       - name: Run test from project
