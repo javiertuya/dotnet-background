@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace TestDotnetBackground
 {
@@ -108,15 +109,24 @@ namespace TestDotnetBackground
 
             //check final state of logs
             Assert.IsFalse(File.Exists(ProcessPidLog), "pid file should be deleted");
-            string[] out1 = File.ReadAllLines(Process1OutLog);
+            string[] out1 = ReadOutputExcludeWarning(Process1OutLog);
             Assert.AreEqual("Start TestProcess:", out1[0], "Must write startup info");
             Assert.AreEqual("Timer 1", out1[1], "Must write timer info");
-            string[] out2 = File.ReadAllLines(Process2OutLog);
+            string[] out2 = ReadOutputExcludeWarning(Process2OutLog);
             Assert.AreEqual("Start TestProcess:ab cd", out2[0], "Must write startup info");
             Assert.AreEqual("Timer 1", out2[1], "Must write timer info");
-            string[] outx = File.ReadAllLines(ProcessxOutLog);
+            string[] outx = ReadOutputExcludeWarning(ProcessxOutLog);
             Assert.AreEqual("Start TestProcess:exit", outx[0], "Must write startup info");
             Assert.AreEqual("end", outx[1], "Must exit");
+        }
+
+        // When running netcore3.1 a deprecation warning message is added to output files and must be removed
+        private string[] ReadOutputExcludeWarning(string fileName)
+        {
+            string[] lines = File.ReadAllLines(fileName);
+            if (lines.Length > 0 && lines[0].Contains("The target framework 'netcoreapp3.1' is out of support"))
+                return lines.Where((lines, index) => index !=0).ToArray();
+            return lines;
         }
 
     }
