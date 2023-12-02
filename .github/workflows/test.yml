@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        framework: ['netcoreapp3.1', 'net6.0', 'net8.0' ]
+        framework: ['net6.0', 'net8.0' ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +21,6 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
             dotnet-version: |
-              3.1.x
               6.0.x
               8.0.x
       - name: Run test from project
