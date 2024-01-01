@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       #requires all sdks to compile and run, but tests and process will be exeucuted on each matrix framework
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@v4
         with:
             dotnet-version: |
               6.0.x
