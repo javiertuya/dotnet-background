@@ -86,7 +86,14 @@ namespace DotnetBackground
         public void Stop(Int32 pid)
         {
             Process proc = Process.GetProcessById(pid);
-            proc.Kill(true);
+            try
+            {
+                proc.Kill(true);
+            } 
+            finally
+            {
+                proc.Dispose();
+            }
         }
     }
 
