@@ -28,6 +28,7 @@ jobs:
           dotnet build TestProcess/TestProcess.csproj
           dotnet test --framework ${{ matrix.framework }} --logger "trx;LogFileName=../../reports/nunit/dotnet-background-report.trx" TestDotnetBackground/TestDotnetBackground.csproj
 
+      - run: ps aux
       - name: Run test from commandline
         if: always()
         run: |
@@ -39,6 +40,9 @@ jobs:
           dotnet DotnetBackground run --out reports/cmdline --project TestProcess/TestProcess.csproj --framework ${{ matrix.framework }} --no-restore --name CustomNamed ab cd
           sleep 5
           dotnet DotnetBackground kill --out reports/cmdline
+      - run: ps aux
+      - run: sleep 5
+      - run: ps aux
 
       #Shows error message in case of some failure (as test report checks are not always produced)
       - name: Failure message if needed
