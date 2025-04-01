@@ -48,7 +48,7 @@ jobs:
       #prevents execution on PR or dependabot that fails with "Resource not accessible by integration" due to permissions
       - name: Publish test report
         if: ${{ always() && github.actor=='javiertuya' }} 
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         with:
           name: test-report-${{ matrix.framework }}
           path: reports/nunit/dotnet-background-report.trx
