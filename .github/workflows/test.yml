@@ -16,7 +16,7 @@ jobs:
         framework: ['net6.0', 'net8.0' ]
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       #requires all sdks to compile and run, but tests and process will be exeucuted on each matrix framework
       - uses: actions/setup-dotnet@v4
         with:
