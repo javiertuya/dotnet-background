@@ -13,16 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        framework: ['net6.0', 'net8.0' ]
+        framework: ['net8.0', 'net10.0']
       fail-fast: false
     steps:
       - uses: actions/checkout@v5
       #requires all sdks to compile and run, but tests and process will be exeucuted on each matrix framework
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
         with:
             dotnet-version: |
-              6.0.x
               8.0.x
+              10.0.x
       - name: Run test from project
         run: |
           dotnet build TestProcess/TestProcess.csproj

@@ -64,6 +64,8 @@ namespace TestDotnetBackground
                 return "net6.0";
             else if (framework.StartsWith(".NET 8.0."))
                 return "net8.0";
+            else if (framework.StartsWith(".NET 10.0."))
+                return "net10.0";
             else
                 throw new Exception("Runtime framework not allowed for this test: " + framework);
         }
