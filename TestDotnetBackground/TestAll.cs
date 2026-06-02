@@ -39,7 +39,8 @@ namespace TestDotnetBackground
         [TestCase("run --name --project proj/proj.csproj", "Parameter --name requires a value but starts with --")]
         public void TestArgListInvalid(string actArgs, string expMessage)
         {
-            var exception = Assert.Throws<CustomArgumentException>(() => new CustomArguments().Parse(actArgs.Split(' ')));
+            Action action = () => new CustomArguments().Parse(actArgs.Split(' '));
+            var exception = Assert.Throws<CustomArgumentException>(action);
             Assert.AreEqual(expMessage, exception.Message);
         }
 
