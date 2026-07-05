@@ -6,9 +6,10 @@ jobs:
   publish:
     #if: ${{ false }}  # disable for now
     runs-on: ubuntu-latest 
-    permissions: 
+    permissions:
       contents: read
-      packages: write 
+      packages: write
+      id-token: write # required for nuget.org trusted publishing (OIDC token issuance)
     steps:
       - uses: actions/checkout@v7
 
@@ -17,8 +18,18 @@ jobs:
             dotnet-version: '10.0.x'
       - name: Pack
         run: dotnet pack --configuration Release DotnetBackground/DotnetBackground.csproj
+      # Trusted Publishing: exchanges the GitHub OIDC token for a short-lived (1h) nuget.org API key.
+      # Requires a trusted publishing policy configured at nuget.org matching this repo and workflow file.
+      # NUGET_USER is the nuget.org account/profile name (NOT the email).
+      # https://learn.microsoft.com/nuget/nuget-org/trusted-publishing
+      - name: NuGet login (OIDC -> temporary API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Push to nuget.org
-        run: dotnet nuget push DotnetBackground/nupkg/*.nupkg  --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json"
+        run: dotnet nuget push DotnetBackground/nupkg/*.nupkg  --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json"
       #- name: Push to int.nugettest.org
       #  run: dotnet nuget push DotnetBackground/nupkg/*.nupkg  --api-key ${{ secrets.NUGETTEST_API_KEY }} --source "https://apiint.nugettest.org/v3/index.json"
  
